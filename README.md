@@ -14,6 +14,9 @@ Focus on DAOs, developers and other creators, based on Venachain, IPFS and other
 > 
 > Demo Online: https://soulcard.noncegeek.com
 >
+> Video Online: https://youtu.be/HVT74l21lB0
+>
+>
 > SoulCard Smart Contract deployed on Venachain: 
 >
 > https://portal.noncegeek.com/live/contract

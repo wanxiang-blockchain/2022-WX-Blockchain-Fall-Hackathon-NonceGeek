@@ -1,43 +1,48 @@
 import React, { useEffect, useState } from 'react';
+import { useSignMessage, useAccount } from 'wagmi';
 import RightCard from '@/components/RightCard/index';
 import Header from '@/components/Header';
 import LeftEdit from '@/components/LeftEdit';
 import './index.less';
-import { useStorage } from '@/hooks/useStorage';
 import RightCardDao from '../../components/RightCardDao/index';
 import Button from '@/components/Button';
-
+import { rand_msg } from '@/requests/DataHandler';
+import { create_user } from '@/requests/UserManager';
 export default function index() {
-  const [individual_info, set_individual_info] = useStorage('individual_info');
-  const [mode, setMode] = useState('ori')
+  const { signMessageAsync } = useSignMessage();
+
+  const { address } = useAccount();
+  const [mode, setMode] = useState('ori');
   const [tempData, setTempData] = useState({
-    name: 'Robert Fox',
-    avatar: '',
-    introduction: 'Have more than 6 years of Digital Product Design experience.',
-    social_links: {
-      twitter: 'https://twitter.com/Web3dAppCamp',
-      mirror_link: 'https://mirror.xyz/apecoder.eth',
-      github_link: 'https://github.com/WeLightProject',
-      wechat: '197626581',
-      discord: 'hitchhacker@3691',
+    basic_info: {
+      avatar: 'test',
+      name: 'Robert Fox',
+      slogan: 'Have more than 6 years of Digital Product Design experience.',
+      social_links: {
+        twitter: 'https://twitter.com/Web3dAppCamp',
+        'mirror_link ': 'https://mirror.xyz/apecoder.eth',
+        'github_link ': 'https://github.com/WeLightProject',
+        'wechat ': '197626581',
+        'discord ': 'hitchhacker@3691',
+      },
+      location: 'California',
+      skills: [
+        'Javascript',
+        'C++',
+        'Python',
+        'HTML',
+        'Node',
+        'C#',
+        'Java',
+        'Javascript',
+        'C++',
+        'Python',
+        'HTML',
+        'Node',
+        'C#',
+        'Java',
+      ],
     },
-    location: 'California',
-    skills: [
-      'Javascript',
-      'C++',
-      'Python',
-      'HTML',
-      'Node',
-      'C#',
-      'Java',
-      'Javascript',
-      'C++',
-      'Python',
-      'HTML',
-      'Node',
-      'C#',
-      'Java',
-    ],
     awesome_things: [
       {
         project: 'Design for the transport',
@@ -108,22 +113,37 @@ export default function index() {
         position: 'founder',
       },
     ],
-  })
+  });
   const [tempDataDao, setTempDataDao] = useState({
-    name: 'Dao Name',
-    avatar: '',
-    dao_link: 'https://noncegeek.com/#/',
-    contract_address: 'contract address',
-    introduction:
-      'Our team is working on a decentralized social product in the Web3 environment.',
-    social_links: {
-      twitter: 'https://twitter.com/Web3dAppCamp',
-      mirror_link: 'https://mirror.xyz/apecoder.eth',
-      github_link: 'https://github.com/WeLightProject',
-      wechat: '197626581',
-      discord: 'hitchhacker@3691',
+    basic_info: {
+      avatar: 'test',
+      name: 'Robert Fox',
+      slogan: 'Have more than 6 years of Digital Product Design experience.',
+      social_links: {
+        twitter: 'https://twitter.com/Web3dAppCamp',
+        'mirror_link ': 'https://mirror.xyz/apecoder.eth',
+        'github_link ': 'https://github.com/WeLightProject',
+        'wechat ': '197626581',
+        'discord ': 'hitchhacker@3691',
+      },
+      location: 'California',
+      skills: [
+        'Javascript',
+        'C++',
+        'Python',
+        'HTML',
+        'Node',
+        'C#',
+        'Java',
+        'Javascript',
+        'C++',
+        'Python',
+        'HTML',
+        'Node',
+        'C#',
+        'Java',
+      ],
     },
-    location: 'California',
     awesome_things: [
       {
         project: 'Design for the transport',
@@ -212,7 +232,7 @@ export default function index() {
         is_core_member: false,
       },
     ],
-    partner: [
+    partners: [
       {
         avatar: 'member-avatar',
         name: 'NonceGeek DAO',
@@ -233,55 +253,89 @@ export default function index() {
         avatar: 'member-avatar',
         name: 'NonceGeek DAO',
       },
-    ]
-  })
-  const getData = (data) => {
-    console.log(data);
-  };
+    ],
+    core_members: [],
+    sub_daos: [],
+  });
   const handleUpdate = (val) => {
-    setMode(val.mode)
+    setMode(val.mode);
     if (val.mode === 'individual') {
-      setTempData(val.data)
+      setTempData(val.data);
     } else {
-      console.log(val.data)
-      setTempDataDao(val.data)
-    }
-  }
-  const saveEdit = () => {
-    if (mode === 'individual') {
-      console.log(tempData)
-    } else {
-      console.log(tempDataDao)
+      setTempDataDao(val.data);
     }
   };
-  useEffect(() => {
-    console.log(individual_info);
-  }, [individual_info]);
+  const saveEdit = async () => {
+    if (mode === 'individual') {
+      // const res = await get_user({ params: [address] });
+      // const isCreated = res.data.result;
+      // if (isCreated) {
+      // } else {
+      //   const res = await rand_msg({ params: [] });
+      //   const message = res.data.result;
+      //   const signature = await signMessageAsync({ message });
+      //   const data = {
+      //     params: [tempData, 'user', address, message, signature],
+      //   };
+      //   console.log(data);
+      //   const x = await create_user(JSON.stringify(data));
+      //   console.log(x);
+      // }
+      const res = await rand_msg({ params: [] });
+      const message = res.data.result;
+      const signature = await signMessageAsync({ message });
+      const data = {
+        params: [tempData, 'user', address, message, signature],
+      };
+      const re = await create_user(JSON.stringify(data));
+      if (re.data.result.status === 'ok') {
+        alert('sussess');
+      } else {
+        alert(re.data.result.payload);
+      }
+    } else {
+      const res = await rand_msg({ params: [] });
+      const message = res.data.result;
+      const signature = await signMessageAsync({ message });
+      const data = {
+        params: [tempDataDao, 'dao', address, message, signature],
+      };
+      console.log(data);
+      const re = await create_user(JSON.stringify(data));
+      if (re.data.result.status === 'ok') {
+        alert('sussess');
+      } else {
+        alert(re.data.result.payload);
+      }
+    }
+  };
   return (
-    <>
-      <div className="w-screen bg-black">
-        <div className="w-main m-auto">
-          {/* 替换成组件 */}
-          <Header></Header>
-          <div className="save-btn relative">
-            <Button
-              colorStyle="green"
-              buttonText="Save"
-              font="IBMPlexMono"
-              onClick={saveEdit}
-            />
-          </div>
-          <main className="flex">
-            <div className="w-2/3 h-[1000px] overflow-y-scroll pt-[14px] text-white">
-              {/* edit component */}
-              <LeftEdit updateForm={handleUpdate}></LeftEdit>
-            </div>
-            <div className="w-2/5 h-screen p-54">
-              {mode === 'individual' ? <RightCard data={tempData} /> : <RightCardDao data={tempDataDao} />}
-            </div>
-          </main>
+    <div className="editor w-full h-screen overflow-hidden flex flex-col bg-black">
+      <div className='flex-grow-0 w-full flex justify-center'>
+        <Header />
+      </div>
+      <div className="flex-grow w-main mx-auto overflow-hidden flex">
+        <div className="left w-2/3 overflow-y-scroll pt-[14px] text-white">
+          <LeftEdit updateForm={handleUpdate}></LeftEdit>
+        </div>
+
+        <div className="right w-2/5 overflow-y-scroll">
+          {mode === 'individual' ? (
+            <RightCard data={tempData} />
+          ) : (
+            <RightCardDao data={tempDataDao} />
+          )}
         </div>
       </div>
-    </>
+      <div className="flex-grow-0 bg-black py-4 flex justify-center items-center">
+        <Button
+          colorStyle="green"
+          buttonText="Save"
+          withSpace={false}
+          font="IBMPlexMono"
+          onClick={saveEdit}
+        />
+      </div>
+    </div>
   );
 }

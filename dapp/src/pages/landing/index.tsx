@@ -3,7 +3,9 @@ import { history } from 'umi';
 
 import Button from '@/components/Button';
 import Header from '@/components/Header';
-import GradientText from '@/components/GradientText';
+import Title from '@/components/Title';
+import GradientLine from '@/components/GradientLine';
+import Card from '@/components/Card';
 
 import CloseIcon from '@/assets/img/close-icon.png';
 import MetaMaskIcon from '@/assets/img/metamask.png';
@@ -12,7 +14,7 @@ import OkIcon from '@/assets/img/ok.png';
 import { useAccount, useConnect, useDisconnect } from 'wagmi';
 import { InjectedConnector } from 'wagmi/connectors/injected';
 
-import { showAccount } from '@/utils/funUtils';
+import { showAccount, viewAccount } from '@/utils/funUtils';
 import './index.less';
 
 enum LoginStatus {
@@ -54,14 +56,13 @@ export default function IndexPage() {
   };
 
   const goToHome = () => {
-    history.push(`/home?addr=${address}`);
+    history.push(`/editor`);
   };
-  const maskBlur = {
-    backdropFilter: 'blur(30px)',
-  };
+
   useEffect(() => {
-    console.log(address);
-  }, [address]);
+    disconnect();
+  }, []);
+
   return (
     <div className="page w-full min-h-screen relative bg-black text-white font-IBMPlexMono">
       <div className="content w-main h-full mx-auto flex flex-col">
@@ -73,7 +74,11 @@ export default function IndexPage() {
         </div>
         <div className="vision w-full flex justify-end">
           <span className="mt-52 w-[44%] text-right">
-          Focus on DAOs, developers and other creators, based on Venachain, IPFS and other technology stacks, SoulCard provides on-chain interactive namecards with high information density that can be Mint as SBT, allowing users to fully display themselves in the cyber world and build a personal brand / DAO brand.
+            Focus on DAOs, developers and other creators, based on Venachain,
+            IPFS and other technology stacks, SoulCard provides on-chain
+            interactive namecards with high information density that can be Mint
+            as SBT, allowing users to fully display themselves in the cyber
+            world and build a personal brand / DAO brand.
           </span>
         </div>
         <div
@@ -88,11 +93,98 @@ export default function IndexPage() {
             fontSize="lg"
           />
         </div>
+        <div className="techstack mt-[300px] pb-36">
+          <div className="title text-center font-IBMPlexMonoBold text-[32px]">
+            Web 3.0 Technology Stack
+          </div>
+          <div className="mt-6 flex items-center">
+            <Title text="Application" left={true} />
+            <div className="flex-grow flex items-center border-solid border border-white/50 p-4 gap-x-4">
+              <div className="flex-grow flex flex-col items-center">
+                <Title text="SoulCard" fontSize="sm" />
+                <GradientLine />
+                <div className="w-full mt-2 flex justify-between items-center gap-x-4">
+                  <Card text={'SoulCard\nEditor'} height="md" />
+                  <Card
+                    text={'ChainHandler\nPreview SoulCard<->IPFS<->SBT'}
+                    height="md"
+                  />
+                  <Card text={'Relationship\nHandler'} height="md" />
+                  <Card text={'UserApp\nCreator'} height="md" />
+                </div>
+              </div>
+              <div className="flex-grow flex flex-col items-center">
+                <Title text="TaiShang Portal" fontSize="sm" />
+                <GradientLine />
+                <div className="w-full mt-2 flex flex-col justify-between items-center gap-y-1">
+                  <Card text={'NFT Gallery'} width="full" height="sm" />
+                  <Card text={'Explorer'} width="full" height="sm" />
+                  <Card text={'App List'} width="full" height="sm" />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="mt-6 flex items-center">
+            <Title text="Backend" left={true} />
+            <div className="flex-grow border-solid border border-white/50 p-4">
+              <div className="w-full flex flex-col justify-between items-center gap-y-2">
+                <Card text={'Data Gateway'} width="full" height="sm" />
+                <div className="w-full flex justify-between items-center gap-x-4">
+                  <Card text={'DAO Profile Manager'} height="md" />
+                  <Card text={'Individual Profile Manager'} height="md" />
+                  <Card text={'GitHub Analyzer'} height="md" />
+                  <Card text={'Relationship Handler'} height="md" />
+                </div>
+                <Card
+                  text={'TaiShang Micro FaaS System ( Infrastructure )'}
+                  width="full"
+                  height="sm"
+                />
+              </div>
+            </div>
+          </div>
+          <div className="mt-6 flex items-center">
+            <Title text="Contracts" left={true} />
+            <div className="flex-grow flex items-center border-solid border border-white/50 p-4 gap-x-4">
+              <div className="w-2/3 flex flex-col justify-between items-center gap-y-2">
+                <Title text="Universal DID Solution" fontSize="sm" />
+                <GradientLine />
+                <div className="w-full flex gap-x-4">
+                  <div className="w-full flex flex-col justify-between items-center gap-y-2">
+                    <Title text="TaiShang Portal" fontSize="sm" />
+                    <GradientLine />
+                    <Card
+                      text={'Addresses Verified'}
+                      width="full"
+                      height="sm"
+                    />
+                    <Card
+                      text={'Addresses Unverified'}
+                      width="full"
+                      height="sm"
+                    />
+                  </div>
+                  <div className="w-full flex flex-col justify-between items-center gap-y-2">
+                    <Title text="Endpoint Aggregator" fontSize="sm" />
+                    <GradientLine />
+                    <Card text={'Formal Endpoints'} width="full" height="sm" />
+                    <Card
+                      text={'Informal Endpoints'}
+                      width="full"
+                      height="sm"
+                    />
+                  </div>
+                </div>
+              </div>
+              <Card text="SBT Compatible with ERC 721" height="lg" />
+            </div>
+          </div>
+        </div>
       </div>
       {showMask && (
         <div
           className="mask fixed top-0 left-0 right-0 bottom-0 bg-black/30 flex justify-center items-center"
-          style={maskBlur}
+          style={{backdropFilter: 'blur(30px)'}}
         >
           <div className="dialog-wrapper">
             <div className="dialog w-[422px] bg-black p-4 flex flex-col items-center">
@@ -136,7 +228,7 @@ export default function IndexPage() {
                       htmlFor="agree"
                       className="ml-2 opacity-50 font-IBMPlexMono text-[12px]"
                     >
-                      I agree to Top5 Terms and Privacy Policy.
+                      I agree to SoulCard Terms and Privacy Policy.
                     </label>
                   </div>
                 </>
@@ -147,8 +239,9 @@ export default function IndexPage() {
                     Skip approving every interaction with your wallet by
                     allowing SoulCard to remember you.
                   </div>
-                  <div className="address mt-5 px-1 py-2 bg-[#4a4a4a] opacity-50">
-                    <span className="font-Inter font-bold text-[#c5c5c5] text-[14px]">
+                  <div className="address mt-5 px-6 py-2 bg-[#4a4a4a] opacity-50 hover:opacity-100 cursor-pointer"
+                  onClick={() => viewAccount(address)}>
+                    <span className="font-Inter font-bold text-[#c5c5c5] text-[14px] tracking-widest">
                       {address && showAccount(address)}
                     </span>
                   </div>
